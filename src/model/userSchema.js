@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 const profileSchema = new mongoose.Schema({
+  id: { type: String },
   name: { type: String, required: true },
   grade: { type: String },
   age: { type: Number },
@@ -15,7 +16,7 @@ const profileSchema = new mongoose.Schema({
 
 const eventSchema = new mongoose.Schema({
   eventName: { type: String, required: true },
-  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "username" }],
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   allDay: { type: Boolean, default: false },
@@ -52,6 +53,7 @@ userSchema.pre("save", async function (next) {
     }
 
     if (this.isModified("password")) {
+      console.log(this.password);
       const hashedPassword = await bcrypt.hash(this.password, 10);
       this.password = hashedPassword;
     }

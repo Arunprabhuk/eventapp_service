@@ -1,4 +1,5 @@
 // src/controllers/profileController.js
+import { StatusCodes } from "http-status-codes";
 import User from "../model/userSchema.js";
 
 export const addProfile = async (req, res) => {
@@ -10,19 +11,61 @@ export const addProfile = async (req, res) => {
     const user = await User.findOne({ userId });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: "User not found",
+        statuscode: 400,
+      });
     }
 
-    user.profile = userProfileData;
+    user.profile.push(userProfileData);
 
     await user.save();
 
-    res.status(200).json({
+    res.status(StatusCodes.OK).json({
       message: "Profile added successfully",
-      userProfile: user.profile,
+      statuscode: 200,
+      userId,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Internal Server Error",
+      statuscode: 400,
+    });
+  }
+};
+
+export const deleteProfile = async (req, res) => {
+  try {
+    const { userId, id } = req.params;
+
+    const userProfileData = req.body;
+
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: "User not found",
+        statuscode: 400,
+      });
+    }
+
+    user.profile.push(userProfileData);
+
+    await user.save();
+
+    res.status(StatusCodes.OK).json({
+      message: "Profile added successfully",
+      statuscode: 200,
+      userId,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Internal Server Error",
+      statuscode: 400,
+    });
   }
 };

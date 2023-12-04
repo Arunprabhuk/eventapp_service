@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import authRoutes from "./src/router/authRoute.js";
 import profileRoutes from "./src/router/profileRouter.js";
 import eventRoutes from "./src/router/eventRoutes.js";
+import userRoutes from "./src/router/userRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
 app.use("/events", eventRoutes);
+app.use("/user", userRoutes);
 
 mongoose
   .connect(process.env.MONGODB_URL, {
